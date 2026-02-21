@@ -1,0 +1,7 @@
+crop,temperature,rainfall,humidity,soil_moisture,yield
+Wheat,30,200,60,45,3.2
+Wheat,35,120,55,30,2.1
+Rice,28,300,70,60,4.5
+Rice,33,180,65,40,3.0
+Maize,32,150,50,35,2.8
+Maize,38,90,45,25,1.9
