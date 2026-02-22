@@ -7,11 +7,19 @@ load_dotenv()
 API_KEY = os.getenv("WEATHER_API_KEY")
 
 def get_weather(city):
-    url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}&units=metric"
-    response = requests.get(url).json()
+    url = (
+        f"https://api.openweathermap.org/data/2.5/weather"
+        f"?q={city}&appid={API_KEY}&units=metric"
+    )
 
-    return {
-        "temperature": response["main"]["temp"],
-        "humidity": response["main"]["humidity"],
-        "rainfall": response.get("rain", {}).get("1h", 0)
-    }
+    response = requests.get(url)
+    data = response.json()
+
+    if data.get("cod") != 200:
+        raise ValueError("City not found")
+
+    temperature = data["main"]["temp"]
+    humidity = data["main"]["humidity"]
+    rainfall = data.get("rain", {}).get("1h", 0)
+
+    return temperature, humidity, rainfall

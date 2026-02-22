@@ -1,37 +1,55 @@
 from flask import Flask, render_template, request
 from src.predict_risk import predict_risk
 from src.alert_system import send_alert
-
-print("✅ app.py started")
+from src.weather_api import get_weather
+from src.explainability import explain_prediction
 
 app = Flask(__name__)
 
 @app.route("/", methods=["GET"])
 def home():
-    print("✅ Home route accessed")
     return render_template("index.html")
 
 @app.route("/predict", methods=["POST"])
 def predict():
-    print("✅ Predict route accessed")
+    try:
+        city = request.form["city"]
+        crop = int(request.form["crop"])
+        soil_moisture = float(request.form["soil_moisture"])
 
-    input_data = {
-        "crop": int(request.form["crop"]),
-        "temperature": float(request.form["temperature"]),
-        "rainfall": float(request.form["rainfall"]),
-        "humidity": float(request.form["humidity"]),
-        "soil_moisture": float(request.form["soil_moisture"])
-    }
+        # 🌦️ Live weather
+        temperature, humidity, rainfall = get_weather(city)
 
-    risk = predict_risk(input_data)
-    alert = send_alert(risk)
+        input_data = {
+            "crop": crop,
+            "temperature": temperature,
+            "rainfall": rainfall,
+            "humidity": humidity,
+            "soil_moisture": soil_moisture
+        }
 
-    return render_template(
-        "index.html",
-        risk=risk,
-        alert=alert
-    )
+        risk = predict_risk(input_data)
+        alert = send_alert(risk)
+
+        # ✅ Explainability MUST be here
+        explanations = explain_prediction(input_data)
+
+        return render_template(
+            "index.html",
+            city=city,
+            temperature=temperature,
+            humidity=humidity,
+            rainfall=rainfall,
+            risk=risk,
+            alert=alert,
+            explanations=explanations
+        )
+
+    except ValueError as e:
+        return render_template(
+            "index.html",
+            error=str(e)
+        )
 
 if __name__ == "__main__":
-    print("🚀 Starting Flask server...")
-    app.run(host="127.0.0.1", port=5000, debug=True)
+    app.run(debug=True)

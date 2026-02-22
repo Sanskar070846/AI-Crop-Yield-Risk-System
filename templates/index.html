@@ -39,34 +39,47 @@
     <h2>🌾 Crop Yield Risk Prediction</h2>
 
     <form method="POST" action="/predict">
-        <label>Crop</label>
-        <select name="crop">
-            <option value="0">Wheat</option>
-            <option value="1">Rice</option>
-            <option value="2">Maize</option>
-        </select>
+    <label>City</label>
+    <input type="text" name="city" required>
 
-        <label>Temperature (°C)</label>
-        <input type="number" step="0.1" name="temperature" required>
+    <label>Crop</label>
+    <select name="crop">
+        <option value="0">Wheat</option>
+        <option value="1">Rice</option>
+        <option value="2">Maize</option>
+    </select>
 
-        <label>Rainfall (mm)</label>
-        <input type="number" step="0.1" name="rainfall" required>
+    <label>Soil Moisture (%)</label>
+    <input type="number" step="0.1" name="soil_moisture" required>
 
-        <label>Humidity (%)</label>
-        <input type="number" step="0.1" name="humidity" required>
+    <button type="submit">Predict Risk</button>
+</form>
 
-        <label>Soil Moisture (%)</label>
-        <input type="number" step="0.1" name="soil_moisture" required>
+{% if risk %}
+<hr>
+<h3>📍 City: {{ city }}</h3>
 
-        <button type="submit">Predict Risk</button>
-    </form>
+<p>🌡️ <strong>Temperature:</strong> {{ temperature }} °C</p>
+<p>💧 <strong>Humidity:</strong> {{ humidity }} %</p>
+<p>🌧️ <strong>Rainfall:</strong> {{ rainfall }} mm</p>
 
-    {% if risk %}
-    <div class="result">
-        <p>Risk Level: {{ risk }}</p>
-        <p>{{ alert }}</p>
-    </div>
-    {% endif %}
+<h2 style="color:green;">Risk Level: {{ risk }}</h2>
+<p><strong>Alert:</strong> {{ alert }}</p>
+{% endif %}
+
+{% if explanations %}
+<hr>
+<h3>🔍 Why this risk?</h3>
+<ul>
+    {% for reason in explanations %}
+        <li>{{ reason }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if error %}
+<p style="color:red;"><strong>Error:</strong> {{ error }}</p>
+{% endif %}
 </div>
 
 </body>
