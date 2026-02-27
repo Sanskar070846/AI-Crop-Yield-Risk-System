@@ -1,4 +1,4 @@
-# Python virtual environment
+# Virtual environment
 venv/
 
 # Python cache
@@ -8,5 +8,12 @@ __pycache__/
 # Environment variables
 .env
 
-# ML model files
-*.pkl
+# Datasets (VERY IMPORTANT)
+disease_detection/**/dataset/
+
+# Large ML models (optional but recommended)
+*.h5
+*.keras
+
+# OS files
+.DS_Store
