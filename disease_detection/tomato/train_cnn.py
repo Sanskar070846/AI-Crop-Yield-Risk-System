@@ -37,6 +37,16 @@ val_data = datagen.flow_from_directory(
     subset="validation"
 )
 
+import json
+
+# Save class labels automatically
+labels = {str(v): k for k, v in train_data.class_indices.items()}
+
+with open(os.path.join(MODEL_DIR, "labels.json"), "w") as f:
+    json.dump(labels, f, indent=4)
+
+print("✅ labels.json generated automatically")
+
 # Base model
 base_model = MobileNetV2(
     input_shape=(224, 224, 3),

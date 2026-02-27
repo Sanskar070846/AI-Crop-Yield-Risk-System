@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tomato Disease Detection</title>
+</head>
+<body>
+    <h2>🍅 Tomato Leaf Disease Detection</h2>
+
+    <form action="/detect-disease" method="POST" enctype="multipart/form-data">
+        <input type="file" name="image" accept="image/*" required>
+        <br><br>
+        <button type="submit">Detect Disease</button>
+    </form>
+
+    {% if disease %}
+        <hr>
+        <h3>Disease Detected: {{ disease }}</h3>
+
+        <p>
+        <strong>Severity Level:</strong>
+        {% if severity == "High" %}
+        <span style="color:red;">🔴 High</span>
+        {% elif severity == "Moderate" %}
+        <span style="color:orange;">🟡 Moderate</span>
+        {% else %}
+        <span style="color:green;">🟢 Low</span>
+        {% endif %}
+        </p>
+
+        {% if treatment %}
+        <p><strong>Recommended Treatment:</strong> {{ treatment }}</p>
+        {% endif %}
+
+        {% if "healthy" in disease.lower() %}
+        <p style="color:green;">✅ Leaf is Healthy. No action required.</p>
+        {% elif severity == "High" %}
+        <p style="color:red;">⚠️ Immediate treatment recommended.</p>
+        {% else %}
+        <p style="color:orange;">⚠️ Monitor crop and apply preventive measures.</p>
+        {% endif %}
+    {% endif %}
+</body>
+</html>

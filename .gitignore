@@ -5,15 +5,15 @@ venv/
 __pycache__/
 *.pyc
 
-# Environment variables
-.env
-
-# Datasets (VERY IMPORTANT)
+# Datasets (ALL crops)
 disease_detection/**/dataset/
 
-# Large ML models (optional but recommended)
+# Trained ML / DL models
 *.h5
 *.keras
 
-# OS files
-.DS_Store
+# Uploads
+static/uploads/
+
+# Environment variables
+.env
